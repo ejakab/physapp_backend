@@ -57,3 +57,8 @@ exports.loginUser = (req, res) => {
         });
     });
 };
+
+exports.userInfo =  (req, res) => {
+    return res.json({ msg: `Name ${req.user.email}` });
+};
+
