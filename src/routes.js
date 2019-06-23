@@ -21,6 +21,7 @@ routes.post("/register", userController.registerUser);
 routes.post("/login", userController.loginUser);
 routes.post("/add-completed-exercise", userController.addCompletedExercise);
 routes.post("/add-dizzy-log", userController.addDizzyLog);
+routes.get("/reauth", userController.reauth);
 //passing in the middleware
 routes.get(
   "/special",
@@ -94,5 +95,5 @@ routes.get("/get-exercises", function(req, res, next) {
     );
   });
 });
-
+// routes.get('/validate', )
 module.exports = routes;

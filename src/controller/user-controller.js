@@ -48,6 +48,7 @@ exports.loginUser = (req, res) => {
 
     user.comparePassword(req.body.password, (err, isMatch) => {
       if (isMatch && !err) {
+        
         return res.status(200).json({
           token: createToken(user)
         });
@@ -124,6 +125,29 @@ exports.addDizzyLog = (req, res) => {
     }
   );
 };
+// REAUTHENTICATING USER WITH VALID TOKEN
+exports.reauth = (req, res) => {
+  const header = req.headers['authorization'];
+  
+  if (typeof header !== 'undefined') {
+    const bearer = header.split(' ');
+    const token = bearer[1]
+    req.token = token;
+    jwt.verify(req.token, config.jwtSecret, (err, authData)=> {
+      if(err){
+        res.sendStatus(403).send(err)
+      } else {
+        User.findOne({email:authData.email}, (err, user) => {
+          if (err) {
+            res.sendStatus(404).send(err)
+          } else {
+            return res.status(200).json(user)
+          }
+        })
+      }
+    })
+  }
+}
 exports.userInfo = (req, res) => {
   return res.json({ msg: `Name ${req.user.email}` });
 };
